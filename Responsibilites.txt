@@ -1,0 +1,19 @@
+I/0 - Rebecca 
+exceptions - Rebecca
+friend function output - Rebecca
+const correctedness - Jenn
+static - Rebecca
+this - Jenn
+include guards - Jenn
+static and dynamic cast
+operator overload - Jenn
+templates - Jenn and Rebecca
+STL - Jenn and Rebecca
+function pointers - Jenn
+auto keyword - Rebecca
+lambda function - Rebecca
+
+inheritance
+polymorphism
+super
+virtual function
