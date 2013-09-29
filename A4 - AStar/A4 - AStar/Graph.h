@@ -3,6 +3,7 @@
 #define _GRAPH_
 
 #include "Node.h"
+#include <vector>
 
 class Graph
 {
@@ -15,9 +16,13 @@ public:
 
 	// Functions
 	void print();
+	vector<Node> findPath(Node*, Node*); // A* algorithm that takes start and end node
+								// Returns the next node to take
 
 private:
 	// Attributes
-	Node** grid; // 2D Grid of nodes
+	Node*** grid; // 2D Grid of node pointers
+	int rows;
+	int cols;
 };
 #endif
