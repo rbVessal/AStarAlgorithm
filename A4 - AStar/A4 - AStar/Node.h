@@ -13,11 +13,13 @@ class Node
 {
 public:
 	// Big Three / Constructors
-	Node(void){ displayData = ' '; }
-	Node(int row, int col){ displayData = ' '; x = row; y = col; }
+	Node(void){ displayData = '.'; }
+	Node(int row, int col){ displayData = '.'; x = row; y = col; }
 	Node(const Node&){}
 	const Node& operator=(const Node&){}
 	~Node(void){}
+
+	void print(){ cout << displayData; }
 
 private:
 	// Attributes
