@@ -21,6 +21,12 @@ public:
 
 	void print(){ cout << displayData; }
 
+	// Public attributes with temp values for algorithm
+	float f;
+	float g;
+	float h;
+	Node* parent;
+
 private:
 	// Attributes
 	char displayData;
