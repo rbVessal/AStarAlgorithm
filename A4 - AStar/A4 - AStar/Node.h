@@ -13,25 +13,30 @@ class Node
 {
 public:
 	// Big Three / Constructors
-	Node(void){ displayData = '.'; }
-	Node(int row, int col){ displayData = '.'; x = row; y = col; }
+	Node(void){ displayData = '.'; parent = NULL; }
+	Node(int row, int col){ displayData = '.'; x = row; y = col; parent = NULL; }
 	Node(const Node&){}
 	const Node& operator=(const Node&){}
 	~Node(void){}
 
 	void print(){ cout << displayData; }
 
+	// Setters and getters
+	int getX() const{ return x; }
+	int getY() const{ return y; }
+	float getF() const{ return g + h; }
+
 	// Public attributes with temp values for algorithm
-	float f;
 	float g;
 	float h;
 	Node* parent;
+	
+	char displayData;
 
 private:
 	// Attributes
-	char displayData;
+	
 	int x;
 	int y;
-	//T* object;
 };
 #endif

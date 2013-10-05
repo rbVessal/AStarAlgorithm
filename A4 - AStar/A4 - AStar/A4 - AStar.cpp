@@ -13,6 +13,9 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	// Do stuff here
 	graph->print();
+	graph->findPath(0, 0, 1, 0);
+	cout << endl;
+	graph->print();
 
 	delete graph;
 
