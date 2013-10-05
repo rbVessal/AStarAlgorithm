@@ -1,16 +1,10 @@
 #include "stdafx.h"
 #include "Graph.h"
 
-// Overload < and > operators for Node comparison (used in priority queue)
-bool operator< (const Node& n1, const Node& n2)
-{
-	// Returns inverse of f so that lower f = higher priority
-	int f1 = static_cast<int>(n1.getF() * -1);
-	int f2 = static_cast<int>(n2.getF() * -1);
-	return f1 < f2;
-}
 
-Graph::Graph(void)
+
+template <class GraphTemplateType>
+Graph<GraphTemplateType>::Graph(void)
 {
 	// Assume that if a graph exists, it must be at least 1x1
 	rows = 1;
@@ -18,38 +12,41 @@ Graph::Graph(void)
 	initBoard();
 }
 
-Graph::Graph(int r, int c)
+template <class GraphTemplateType>
+Graph<GraphTemplateType>::Graph(int r, int c)
 {
 	rows = r;
 	cols = c;
 	initBoard();
 }
 
-void Graph::initBoard()
+template <class GraphTemplateType>
+void Graph<GraphTemplateType>::initBoard()
 {
 	// Allocate a 2D array
-	grid = new Node**[rows];
+	grid = new Node<char>**[rows];
 
 	for(int i=0; i<rows; i++)
 	{
-		grid[i] = new Node*[cols];
+		grid[i] = new Node<char>*[cols];
 
 		for(int j=0; j<cols; j++)
 		{
-			grid[i][j] = new Node(i, j);
+			grid[i][j] = new Node<char>(i, j, '.');
 		}
 	}
 }
 
 // An overload of the findPath function that takes coordinates
-//vector<Node*> Graph::findPath(int x1, int y1, int x2, int y2)
-Node* Graph::findPath(int x1, int y1, int x2, int y2)
+//vector<Node<char>*> Graph<GraphTemplateType>::findPath(int x1, int y1, int x2, int y2)
+template <class GraphTemplateType>
+Node<char>* Graph<GraphTemplateType>::findPath(int x1, int y1, int x2, int y2)
 {
-	Node* startNode = grid[x1][y1];
-	Node* endNode = grid[x2][y2];
+	Node<char>* startNode = grid[x1][y1];
+	Node<char>* endNode = grid[x2][y2];
 
-	//vector<Node*> path = findPath(startNode, endNode);
-	Node* goal = findPath(startNode, endNode);
+	//vector<Node<char>*> path = findPath(startNode, endNode);
+	//Node<char>* goal = findPath(startNode, endNode);
 
 	// Highlight the path
 	/*for(int i=0; i < path.size(); i++)
@@ -57,8 +54,8 @@ Node* Graph::findPath(int x1, int y1, int x2, int y2)
 		path[i]->displayData = 'X';
 	}*/
 
-	
-	Node* current = goal;
+	/*
+	Node<char>* current = goal;
 	while(current->getX() != x1 && current->getY() != y1)
 	{
 		current->displayData = 'X';
@@ -66,19 +63,23 @@ Node* Graph::findPath(int x1, int y1, int x2, int y2)
 	}
 	//current->displayData = 'X';
 
-	return goal;
+	return goal;*/
+
+	return startNode;
 }
+
 
 // A* ALGORITHM
 // Pseudo-code reference: http://heyes-jones.com/pseudocode.php
-//vector<Node*> Graph::findPath(Node* start, Node* destination)
-Node* Graph::findPath(Node* start, Node* destination)
+//vector<Node<char>*> Graph<GraphTemplateType>::findPath(Node<char>* start, Node<char>* destination)
+template <class GraphTemplateType>
+Node<char>* Graph<GraphTemplateType>::findPath(Node<char>* start, Node<char>* destination)
 {
-	priority_queue<Node*> open_list; // Nodes not yet checked
-	vector<Node*> closed_list; // Nodes previously checked
+	priority_queue<Node<char>*> open_list; // Nodes not yet checked
+	vector<Node<char>*> closed_list; // Nodes previously checked
 
 	open_list.push(start); // Put the starting node on the open list
-	
+		
 	start->g = 0;
 	start->h = heuristicDistance(start, destination);
 
@@ -86,7 +87,7 @@ Node* Graph::findPath(Node* start, Node* destination)
 	while(open_list.size() > 0)
 	{
 		// Get the node off the open list with the lowest f and make it the current node
-		Node* current = open_list.top(); // Top is lowest f
+		Node<char>* current = open_list.top(); // Top is lowest f
 		open_list.pop();
 
 		// If current is same as goal, break from loop
@@ -95,12 +96,12 @@ Node* Graph::findPath(Node* start, Node* destination)
 			//break;
 
 		// generate each successor that can come after current
-		vector<Node*> successors = getAllNeighbors(current);
+		vector<Node<char>*> successors = getAllNeighbors(current);
 		
 		// for each successor of current node, do the following
 		while(successors.size() > 0)
 		{
-			Node* successor = successors.back();
+			Node<char>* successor = successors.back();
 			successors.pop_back();
 
 			// set the cost (g) of successor to be the cost of current plus the cost to get to successor from current
@@ -142,12 +143,13 @@ Node* Graph::findPath(Node* start, Node* destination)
 		// add current to closed list
 		closed_list.push_back(current);
 	}
-
+	
 	//return closed_list; // return the closed list (is this correct?)
 	return NULL;
 }
 
-float Graph::heuristicDistance(const Node* n1, const Node* n2)
+template <class GraphTemplateType>
+float Graph<GraphTemplateType>::heuristicDistance(const Node<char>* n1, const Node<char>* n2)
 {
 	float distX = (n1->getX() - n2->getX()) * (n1->getX() - n2->getX());
 	float distY = (n1->getY() - n2->getY()) * (n1->getY() - n2->getY());
@@ -156,11 +158,12 @@ float Graph::heuristicDistance(const Node* n1, const Node* n2)
 }
 
 // Returns true if the node is in the priority queue
-bool Graph::isInPriorityQueue(priority_queue<Node*> pqueue, const Node* n)
+template <class GraphTemplateType>
+bool Graph<GraphTemplateType>::isInPriorityQueue(priority_queue<Node<char>*> pqueue, const Node<char>* n)
 {
 	while(pqueue.size() > 0)
 	{
-		Node* current = pqueue.top();
+		Node<char>* current = pqueue.top();
 		pqueue.pop();
 
 		if(current == n)
@@ -170,11 +173,12 @@ bool Graph::isInPriorityQueue(priority_queue<Node*> pqueue, const Node* n)
 	return false;
 }
 
-bool Graph::isInVector(vector<Node*> vect, const Node* n)
+template <class GraphTemplateType>
+bool Graph<GraphTemplateType>::isInVector(vector<Node<char>*> vect, const Node<char>* n)
 {
 	for(int i=0; i < vect.size(); i++)
 	{
-		Node* current = vect[i];
+		Node<char>* current = vect[i];
 
 		if(current == n)
 			return true;
@@ -182,15 +186,15 @@ bool Graph::isInVector(vector<Node*> vect, const Node* n)
 	return false;
 }
 
-
-void Graph::removeFromPQ(priority_queue<Node*>* pqueue, const Node* n)
+template <class GraphTemplateType>
+void Graph<GraphTemplateType>::removeFromPQ(priority_queue<Node<char>*>* pqueue, const Node<char>* n)
 {
 	// Use a second pq to store popped items
-	priority_queue<Node*> temporary;
+	priority_queue<Node<char>*> temporary;
 	
 	while(pqueue->size() > 0)
 	{
-		Node* current = pqueue->top();
+		Node<char>* current = pqueue->top();
 		pqueue->pop();
 
 		// Add to temporary list if it's not the one we're removing
@@ -203,21 +207,22 @@ void Graph::removeFromPQ(priority_queue<Node*>* pqueue, const Node* n)
 	// Fill the original back up
 	while(temporary.size() > 0)
 	{
-		Node* current = temporary.top();
+		Node<char>* current = temporary.top();
 		temporary.pop();
 
 		pqueue->push(current);
 	}
 }
 
-void Graph::removeFromVector(vector<Node*>* vect, const Node* n)
+template <class GraphTemplateType>
+void Graph<GraphTemplateType>::removeFromVector(vector<Node<char>*>* vect, const Node<char>* n)
 {
 	// Use a second vector to store popped items
-	vector<Node*> temporary;
+	vector<Node<char>*> temporary;
 	
 	while(vect->size() > 0)
 	{
-		Node* current = vect->back();
+		Node<char>* current = vect->back();
 		vect->pop_back();
 
 		// Add to temporary list if it's not the one we're removing
@@ -230,7 +235,7 @@ void Graph::removeFromVector(vector<Node*>* vect, const Node* n)
 	// Fill the original back up
 	while(temporary.size() > 0)
 	{
-		Node* current = temporary.back();
+		Node<char>* current = temporary.back();
 		temporary.pop_back();
 
 		vect->push_back(current);
@@ -239,9 +244,10 @@ void Graph::removeFromVector(vector<Node*>* vect, const Node* n)
 
 // Returns all in-bounds neighbors of a node
 // TODO: define which neighbors are non-traversable (e.g., walls)
-vector<Node*> Graph::getAllNeighbors(const Node* n)
+template <class GraphTemplateType>
+vector<Node<char>*> Graph<GraphTemplateType>::getAllNeighbors(const Node<char>* n)
 {
-	vector<Node*> neighbors;
+	vector<Node<char>*> neighbors;
 
 	// x - 1
 	if(n->getX() - 1 >= 0)
@@ -282,7 +288,8 @@ vector<Node*> Graph::getAllNeighbors(const Node* n)
 	return neighbors;
 }
 
-void Graph::print()
+template <class GraphTemplateType>
+void Graph<GraphTemplateType>::print()
 {
 	for(int i=0; i<rows; i++)
 	{
@@ -294,7 +301,8 @@ void Graph::print()
 	}
 }
 
-Graph::~Graph(void)
+template <class GraphTemplateType>
+Graph<GraphTemplateType>::~Graph(void)
 {
 	// Deallocate 2D array
 	for(int i=0; i<rows; i++)
