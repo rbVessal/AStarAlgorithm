@@ -1,6 +1,14 @@
 #include "stdafx.h"
 #include "Graph.h"
 
+// Overload < and > operators for Node comparison (used in priority queue)
+bool operator< (const Node<char>& n1, const Node<char>& n2)
+{
+	// Returns inverse of f so that lower f = higher priority
+	int f1 = static_cast<int>(n1.getF() * -1);
+	int f2 = static_cast<int>(n2.getF() * -1);
+	return f1 < f2;
+}
 
 
 template <class GraphTemplateType>
