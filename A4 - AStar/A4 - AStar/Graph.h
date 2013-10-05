@@ -19,8 +19,10 @@ public:
 	// Functions
 	void initBoard();
 	void print();
-	Node<char>* findPath(Node<char>*, Node<char>*); // A* algorithm that takes start and end node
-	Node<char>* findPath(int, int, int, int); // an overload of the function that takes coordinates
+	//Node<char>* findPath(Node<char>*, Node<char>*); // A* algorithm that takes start and end node
+	//Node<char>* findPath(int, int, int, int); // an overload of the function that takes coordinates
+	vector<Node<char>*> findPath(Node<char>*, Node<char>*); // A* algorithm that takes start and end node
+	vector<Node<char>*> findPath(int, int, int, int); // an overload of the function that takes coordinates
 	float heuristicDistance(const Node<char>*, const Node<char>*); // Distance between two nodes
 	vector<Node<char>*> getAllNeighbors(const Node<char>*);
 	bool isInPriorityQueue(priority_queue<Node<char>*>, const Node<char>*);

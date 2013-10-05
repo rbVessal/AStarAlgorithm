@@ -1,7 +1,22 @@
 #include "stdafx.h"
 #include "Graph.h"
 
+// Overload < and > operators for Node comparison (used in priority queue)
+/*bool operator< (const Node<char>& n1, const Node<char>& n2)
+{
+	// Returns inverse of f so that lower f = higher priority
+	int f1 = static_cast<int>(n1.getF() * -1);
+	int f2 = static_cast<int>(n2.getF() * -1);
+	return f1 < f2;
+}
 
+bool operator> (const Node<char>& n1, const Node<char>& n2)
+{
+	// Returns inverse of f so that lower f = higher priority
+	int f1 = static_cast<int>(n1.getF() * -1);
+	int f2 = static_cast<int>(n2.getF() * -1);
+	return f1 > f2;
+}*/
 
 template <class GraphTemplateType>
 Graph<GraphTemplateType>::Graph(void)
@@ -38,42 +53,41 @@ void Graph<GraphTemplateType>::initBoard()
 }
 
 // An overload of the findPath function that takes coordinates
-//vector<Node<char>*> Graph<GraphTemplateType>::findPath(int x1, int y1, int x2, int y2)
 template <class GraphTemplateType>
-Node<char>* Graph<GraphTemplateType>::findPath(int x1, int y1, int x2, int y2)
+//Node<char>* Graph<GraphTemplateType>::findPath(int x1, int y1, int x2, int y2)
+vector<Node<char>*> Graph<GraphTemplateType>::findPath(int x1, int y1, int x2, int y2)
 {
 	Node<char>* startNode = grid[x1][y1];
 	Node<char>* endNode = grid[x2][y2];
 
-	//vector<Node<char>*> path = findPath(startNode, endNode);
+	vector<Node<char>*> path = findPath(startNode, endNode);
 	//Node<char>* goal = findPath(startNode, endNode);
 
 	// Highlight the path
-	/*for(int i=0; i < path.size(); i++)
+	for(int i=0; i < path.size(); i++)
 	{
-		path[i]->displayData = 'X';
-	}*/
+		path[i]->setData('X');
+	}
 
 	/*
 	Node<char>* current = goal;
 	while(current->getX() != x1 && current->getY() != y1)
 	{
-		current->displayData = 'X';
+		current->setData('X');
 		current = current->parent;
-	}
+	}*/
 	//current->displayData = 'X';
 
-	return goal;*/
-
-	return startNode;
+	//return goal;
+	return path;
 }
 
 
 // A* ALGORITHM
 // Pseudo-code reference: http://heyes-jones.com/pseudocode.php
-//vector<Node<char>*> Graph<GraphTemplateType>::findPath(Node<char>* start, Node<char>* destination)
 template <class GraphTemplateType>
-Node<char>* Graph<GraphTemplateType>::findPath(Node<char>* start, Node<char>* destination)
+//Node<char>* Graph<GraphTemplateType>::findPath(Node<char>* start, Node<char>* destination)
+vector<Node<char>*> Graph<GraphTemplateType>::findPath(Node<char>* start, Node<char>* destination)
 {
 	priority_queue<Node<char>*> open_list; // Nodes not yet checked
 	vector<Node<char>*> closed_list; // Nodes previously checked
@@ -92,8 +106,8 @@ Node<char>* Graph<GraphTemplateType>::findPath(Node<char>* start, Node<char>* de
 
 		// If current is same as goal, break from loop
 		if(current == destination)
-			return current;
-			//break;
+			//return current;
+			break;
 
 		// generate each successor that can come after current
 		vector<Node<char>*> successors = getAllNeighbors(current);
@@ -144,8 +158,7 @@ Node<char>* Graph<GraphTemplateType>::findPath(Node<char>* start, Node<char>* de
 		closed_list.push_back(current);
 	}
 	
-	//return closed_list; // return the closed list (is this correct?)
-	return NULL;
+	return closed_list; // return the closed list (is this correct?)
 }
 
 template <class GraphTemplateType>

@@ -26,6 +26,8 @@ public:
 	int getY() const{ return y; }
 	float getF() const{ return g + h; }
 
+	void setData(TemplateDataType d) { displayData = d; }
+
 	// Public attributes with temp values for algorithm
 	float g;
 	float h;
