@@ -18,8 +18,8 @@ public:
 	// Functions
 	void initBoard();
 	void print();
-	vector<Node<char>> findPath(Node<char>*, Node<char>*); // A* algorithm that takes start and end node
-								// Returns the next node to take
+	vector<Node<char>*> findPath(Node<char>*, Node<char>*); // A* algorithm that takes start and end node
+															// Returns the next node to take
 
 private:
 	// Attributes

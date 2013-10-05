@@ -21,6 +21,12 @@ public:
 
 	void print();
 
+	// Public attributes with temp values for algorithm
+	float f;
+	float g;
+	float h;
+	Node* parent;
+
 private:
 	// Attributes
 	TemplateDataType* displayData;
