@@ -3,13 +3,13 @@
 
 #include "stdafx.h"
 #include <stdlib.h>
-#include "Graph.h"
+#include "Graph.cpp"
 
 int _tmain(int argc, _TCHAR* argv[])
 {
 	cout << "A* Demonstration" << endl;
 
-	Graph* graph = new Graph(9, 9);
+	Graph<char>* graph = new Graph<char>(9, 9);
 
 	// Do stuff here
 	graph->print();

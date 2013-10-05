@@ -1,10 +1,10 @@
-#pragma once
 #ifndef _GRAPH_
 #define _GRAPH_
 
-#include "Node.h"
+#include "Node.cpp" //Need to include cpp file because of compile time with templates
 #include <vector>
 
+template <class GraphTemplateType> 
 class Graph
 {
 public:
@@ -18,12 +18,12 @@ public:
 	// Functions
 	void initBoard();
 	void print();
-	vector<Node> findPath(Node*, Node*); // A* algorithm that takes start and end node
+	vector<Node<char>> findPath(Node<char>*, Node<char>*); // A* algorithm that takes start and end node
 								// Returns the next node to take
 
 private:
 	// Attributes
-	Node*** grid; // 2D Grid of node pointers
+	Node<char>*** grid; // 2D Grid of node pointers
 	int rows;
 	int cols;
 };

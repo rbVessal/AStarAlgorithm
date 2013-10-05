@@ -1,4 +1,3 @@
-#pragma once
 #ifndef _NODE_
 #define _NODE_
 
@@ -8,24 +7,25 @@ using namespace std;
 // Templates used for the ambiguity of an "object" on the grid
 // The T* object member in this class is that object.
 // Everything is in the header file to avoid linker problems with templates.
-//template <typename T>
+
+template <class TemplateDataType>
 class Node
 {
 public:
 	// Big Three / Constructors
-	Node(void){ displayData = '.'; }
-	Node(int row, int col){ displayData = '.'; x = row; y = col; }
-	Node(const Node&){}
-	const Node& operator=(const Node&){}
-	~Node(void){}
+	Node(void);
+	Node(int row, int col, TemplateDataType* displayData);
+	Node(const Node&);
+	const Node& operator=(const Node&);
+	~Node(void);
 
-	void print(){ cout << displayData; }
+	void print();
 
 private:
 	// Attributes
-	char displayData;
+	TemplateDataType* displayData;
 	int x;
 	int y;
-	//T* object;
+	
 };
 #endif
