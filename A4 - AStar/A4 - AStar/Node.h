@@ -15,18 +15,18 @@ public:
 	// Big Three / Constructors
 	Node(void);
 	Node(int row, int col, TemplateDataType displayData);
-	Node(const Node&);
-	const Node& operator=(const Node&);
+	Node(const Node<TemplateDataType>& other);
+	const Node<TemplateDataType>& operator=(const Node<TemplateDataType>& other);
 	~Node(void);
 
 	void print();
 
 	// Setters and getters
-	int getX() const{ return x; }
-	int getY() const{ return y; }
-	float getF() const{ return g + h; }
+	int getX() const;
+	int getY() const;
+	float getF() const;
 
-	void setData(TemplateDataType d) { displayData = d; }
+	void setDisplayData(TemplateDataType displayData);
 
 	// Public attributes with temp values for algorithm
 	float g;

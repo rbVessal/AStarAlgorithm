@@ -2,7 +2,7 @@
 #include "Graph.h"
 
 // Overload < and > operators for Node comparison (used in priority queue)
-/*bool operator< (const Node<char>& n1, const Node<char>& n2)
+bool operator< (const Node<char>& n1, const Node<char>& n2)
 {
 	// Returns inverse of f so that lower f = higher priority
 	int f1 = static_cast<int>(n1.getF() * -1);
@@ -16,8 +16,9 @@ bool operator> (const Node<char>& n1, const Node<char>& n2)
 	int f1 = static_cast<int>(n1.getF() * -1);
 	int f2 = static_cast<int>(n2.getF() * -1);
 	return f1 > f2;
-}*/
+}
 
+//Default constructor
 template <class GraphTemplateType>
 Graph<GraphTemplateType>::Graph(void)
 {
@@ -27,12 +28,33 @@ Graph<GraphTemplateType>::Graph(void)
 	initBoard();
 }
 
+//Parameterized constructor
 template <class GraphTemplateType>
 Graph<GraphTemplateType>::Graph(int r, int c)
 {
 	rows = r;
 	cols = c;
 	initBoard();
+}
+
+//Copy constructor
+template <class GraphTemplateType>
+Graph<GraphTemplateType>::Graph(const Graph<GraphTemplateType>& other)
+{
+	rows = other.rows;
+	cols = other.cols;
+}
+
+//Copy assignment constructor
+template <class GraphTemplateType>
+const Graph<GraphTemplateType>& Graph<GraphTemplateType>::operator=(const Graph<GraphTemplateType>& other)
+{
+	if(this != &other)
+	{
+		rows = other.rows;
+		cols = other.cols;
+	}
+	return *this;
 }
 
 template <class GraphTemplateType>
@@ -161,6 +183,7 @@ vector<Node<char>*> Graph<GraphTemplateType>::findPath(Node<char>* start, Node<c
 	return closed_list; // return the closed list (is this correct?)
 }
 
+// Use the distance formula as the heuristic
 template <class GraphTemplateType>
 float Graph<GraphTemplateType>::heuristicDistance(const Node<char>* n1, const Node<char>* n2)
 {
@@ -180,7 +203,9 @@ bool Graph<GraphTemplateType>::isInPriorityQueue(priority_queue<Node<char>*> pqu
 		pqueue.pop();
 
 		if(current == n)
-			return true; 
+		{
+			return true;
+		}
 	}
 
 	return false;
@@ -194,7 +219,9 @@ bool Graph<GraphTemplateType>::isInVector(vector<Node<char>*> vect, const Node<c
 		Node<char>* current = vect[i];
 
 		if(current == n)
+		{
 			return true;
+		}
 	}
 	return false;
 }
@@ -269,11 +296,15 @@ vector<Node<char>*> Graph<GraphTemplateType>::getAllNeighbors(const Node<char>* 
 
 		// x - 1, y - 1
 		if(n->getY() - 1 >= 0)
+		{
 			neighbors.push_back(grid[n->getX() - 1][n->getY() - 1]);
+		}
 
 		// x - 1, y + 1
 		if(n->getY() + 1 < cols)
+		{
 			neighbors.push_back(grid[n->getX() - 1][n->getY() + 1]);
+		}
 	}
 
 	// x + 1
@@ -283,20 +314,28 @@ vector<Node<char>*> Graph<GraphTemplateType>::getAllNeighbors(const Node<char>* 
 
 		// x + 1, y - 1
 		if(n->getY() - 1 >= 0)
+		{
 			neighbors.push_back(grid[n->getX() + 1][n->getY() - 1]);
+		}
 
 		// x + 1, y + 1
 		if(n->getY() + 1 < cols)
+		{
 			neighbors.push_back(grid[n->getX() + 1][n->getY() + 1]);
+		}
 	}
 
 	// y - 1
 	if(n->getY() - 1 >= 0)
+	{
 		neighbors.push_back(grid[n->getX()][n->getY() - 1]);
+	}
 
 	// y + 1
 	if(n->getY() + 1 < cols)
+	{
 		neighbors.push_back(grid[n->getX()][n->getY() + 1]);
+	}
 
 	return neighbors;
 }

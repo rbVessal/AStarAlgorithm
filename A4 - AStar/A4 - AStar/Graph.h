@@ -12,8 +12,8 @@ public:
 	// Big Three / Constructors
 	Graph(void);
 	Graph(int, int);
-	Graph(const Graph&);
-	const Graph& operator=(const Graph&);
+	Graph(const Graph<GraphTemplateType>& other);
+	const Graph<GraphTemplateType>& operator=(const Graph<GraphTemplateType>& other);
 	~Graph(void);
 
 	// Functions

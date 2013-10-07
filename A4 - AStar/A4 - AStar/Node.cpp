@@ -6,7 +6,7 @@
 //Difference between class and typename in templates
 // see http://stackoverflow.com/questions/2023977/c-difference-of-keywords-typename-and-class-in-templates
 
-//Big 3 of C++
+//Default constructor
 template <class TemplateDataType>
 Node<TemplateDataType>::Node(void)
 {
@@ -14,14 +14,62 @@ Node<TemplateDataType>::Node(void)
 	parent = NULL;
 }
 
+//Parameterized constructor
 template <class TemplateDataType>
 Node<TemplateDataType>::Node(int row, int col, TemplateDataType displayData)
 {
-	this->x = row;
-	this->y = col;
+	x = row;
+	y = col;
 	this->displayData = displayData;
 }
 
+//Copy constructor
+template <class TemplateDataType>
+Node<TemplateDataType>::Node(const Node<TemplateDataType>& other)
+{
+	x = other.x;
+	y = other.y;
+	g = other.g;
+	h = other.h;
+	displayData = other.displayData;
+
+}
+
+//Copy assignment constructor
+template <class TemplateDataType>
+const Node<TemplateDataType>& Node<TemplateDataType>::operator=(const Node<TemplateDataType>& other)
+{
+	if(this != &other)
+	{
+		x = other.x;
+		y = other.y;
+		g = other.g;
+		h = other.h;
+		displayData = other.displayData;
+	}
+	return *this;
+}
+
+//Getters and setters
+template <class TemplateDataType>
+int Node<TemplateDataType>::getX() const
+{
+	return x;
+}
+
+template <class TemplateDataType>
+int Node<TemplateDataType>::getY() const
+{
+	return y;
+}
+
+template <class TemplateDataType>
+float Node<TemplateDataType>::getF() const
+{
+	return g + h;
+}
+
+//Destructor
 template <class TemplateDataType>
 Node<TemplateDataType>::~Node(void)
 {
@@ -29,6 +77,7 @@ Node<TemplateDataType>::~Node(void)
 	y = 0;
 }
 
+//Print out the character of the node
 template <class TemplateDataType>
 void Node<TemplateDataType>::print()
 {
