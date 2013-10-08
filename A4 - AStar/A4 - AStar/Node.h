@@ -19,6 +19,27 @@ public:
 	const Node<TemplateDataType>& operator=(const Node<TemplateDataType>& other);
 	~Node(void);
 
+
+	// Overload < and > operators for Node comparison (used in priority queue)
+	//Must make these functions non-member functions since an operator overload
+	//member function only takes one parameter
+	// see: http://www.velocityreviews.com/forums/t279133-overloading-operator.html
+	bool operator< (const Node<TemplateDataType>& n1)
+	{
+		// Returns inverse of f so that lower f = higher priority
+		int f1 = static_cast<int>(this->getF() * -1);
+		int f2 = static_cast<int>(n1.getF() * -1);
+		return f1 < f2;
+	}
+
+	bool operator> (const Node<TemplateDataType>& n1)
+	{
+		// Returns inverse of f so that lower f = higher priority
+		int f1 = static_cast<int>(this->getF() * -1);
+		int f2 = static_cast<int>(n1.getF() * -1);
+		return f1 > f2;
+	}
+
 	void print();
 
 	// Setters and getters

@@ -1,23 +1,6 @@
 #include "stdafx.h"
 #include "Graph.h"
 
-// Overload < and > operators for Node comparison (used in priority queue)
-bool operator< (const Node<char>& n1, const Node<char>& n2)
-{
-	// Returns inverse of f so that lower f = higher priority
-	int f1 = static_cast<int>(n1.getF() * -1);
-	int f2 = static_cast<int>(n2.getF() * -1);
-	return f1 < f2;
-}
-
-bool operator> (const Node<char>& n1, const Node<char>& n2)
-{
-	// Returns inverse of f so that lower f = higher priority
-	int f1 = static_cast<int>(n1.getF() * -1);
-	int f2 = static_cast<int>(n2.getF() * -1);
-	return f1 > f2;
-}
-
 //Default constructor
 template <class GraphTemplateType>
 Graph<GraphTemplateType>::Graph(void)
@@ -86,9 +69,24 @@ vector<Node<char>*> Graph<GraphTemplateType>::findPath(int x1, int y1, int x2, i
 	//Node<char>* goal = findPath(startNode, endNode);
 
 	// Highlight the path
-	for(int i=0; i < path.size(); i++)
+	for(size_t i=0; i < path.size(); i++)
 	{
-		path[i]->setData('X');
+		//Starting point
+		if(i == 0)
+		{
+			path[i]->setDisplayData('S');
+		}
+		//Goal
+		else if(i == path.size() - 1)
+		{
+			path[i]->setDisplayData('G');
+		}
+		//Path from starting point to goal
+		else
+		{
+			path[i]->setDisplayData('X');
+		}
+		
 	}
 
 	/*
@@ -214,7 +212,7 @@ bool Graph<GraphTemplateType>::isInPriorityQueue(priority_queue<Node<char>*> pqu
 template <class GraphTemplateType>
 bool Graph<GraphTemplateType>::isInVector(vector<Node<char>*> vect, const Node<char>* n)
 {
-	for(int i=0; i < vect.size(); i++)
+	for(size_t i=0; i < vect.size(); i++)
 	{
 		Node<char>* current = vect[i];
 

@@ -69,6 +69,12 @@ float Node<TemplateDataType>::getF() const
 	return g + h;
 }
 
+template <class TemplateDataType>
+void Node<TemplateDataType>::setDisplayData(TemplateDataType displayData)
+{
+	this->displayData = displayData;
+}
+
 //Destructor
 template <class TemplateDataType>
 Node<TemplateDataType>::~Node(void)
