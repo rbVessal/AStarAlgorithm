@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Graph.h"
 
+#define EDGE_COST 1
+
 //Default constructor
 template <class GraphTemplateType>
 Graph<GraphTemplateType>::Graph(void)
@@ -59,7 +61,6 @@ void Graph<GraphTemplateType>::initBoard()
 
 // An overload of the findPath function that takes coordinates
 template <class GraphTemplateType>
-//Node<char>* Graph<GraphTemplateType>::findPath(int x1, int y1, int x2, int y2)
 vector<Node<char>*> Graph<GraphTemplateType>::findPath(int x1, int y1, int x2, int y2)
 {
 	Node<char>* startNode = grid[x1][y1];
@@ -89,45 +90,50 @@ vector<Node<char>*> Graph<GraphTemplateType>::findPath(int x1, int y1, int x2, i
 		
 	}
 
-	/*
-	Node<char>* current = goal;
-	while(current->getX() != x1 && current->getY() != y1)
-	{
-		current->setData('X');
-		current = current->parent;
-	}*/
-	//current->displayData = 'X';
-
 	//return goal;
 	return path;
 }
 
 
+
+
 // A* ALGORITHM
 // Pseudo-code reference: http://heyes-jones.com/pseudocode.php
+// see also: http://www.policyalmanac.org/games/aStarTutorial.htm
 template <class GraphTemplateType>
 //Node<char>* Graph<GraphTemplateType>::findPath(Node<char>* start, Node<char>* destination)
 vector<Node<char>*> Graph<GraphTemplateType>::findPath(Node<char>* start, Node<char>* destination)
 {
-	priority_queue<Node<char>*> open_list; // Nodes not yet checked
-	vector<Node<char>*> closed_list; // Nodes previously checked
+	
+	vector<Node<char>*> open_list; // Potential adjacent nodes that can become part of the new path between start node and end node
+	//vector<Node<char>*>open_vector_list;
+	vector<Node<char>*> closed_list; // Nodes that are part of the start and end node including the end node
 
-	open_list.push(start); // Put the starting node on the open list
-		
+	//Store the start node into the open vector list
 	start->g = 0;
 	start->h = heuristicDistance(start, destination);
+	open_list.push_back(start);
 
 	// while open list is not empty
 	while(open_list.size() > 0)
 	{
+		sortList(open_list);
 		// Get the node off the open list with the lowest f and make it the current node
-		Node<char>* current = open_list.top(); // Top is lowest f
-		open_list.pop();
+		Node<char>* current = open_list.back(); // Top is lowest f
+		//cout << "current node: " << current << endl;
+		//cout << " current size "<<open_list.size() <<endl;
+		//cout << " " << current->x << " "  << current->y <<endl;
+		open_list.pop_back();
+
+		// add current to closed list
+		closed_list.push_back(current);
 
 		// If current is same as goal, break from loop
 		if(current == destination)
+		{
 			//return current;
 			break;
+		}
 
 		// generate each successor that can come after current
 		vector<Node<char>*> successors = getAllNeighbors(current);
@@ -135,50 +141,72 @@ vector<Node<char>*> Graph<GraphTemplateType>::findPath(Node<char>* start, Node<c
 		// for each successor of current node, do the following
 		while(successors.size() > 0)
 		{
+			//Get each successor from the back of the vector list of neighbors to the current node
 			Node<char>* successor = successors.back();
 			successors.pop_back();
 
-			// set the cost (g) of successor to be the cost of current plus the cost to get to successor from current
-			successor->g = current->g + 1; // cost from current to successor is always 1
-
-			// find successor in open_list
-			if(isInPriorityQueue(open_list, successor))
-			{
-				// if successor is on open list but the existing one is better or equal f, discard this successor and continue
-				if(current->getF() < successor->getF())
-				{
-					continue;
-				}
-			}
-			
-			// if successor is on the CLOSED list but the existing one is as good or better then discard this successor and continue
+			// if successor is on the CLOSED list, then ignore it
 			if(isInVector(closed_list, successor))
 			{
-				if(current->getF() < successor->getF())
-				{
-					continue;
-				}
+				continue;
 			}
+			// Check to see if the successor is not in the open list
+			else if(!(isInPriorityQueue(open_list, successor)))
+			{
+				// add successor to open list
+				//open_vector_list.push_back(successor);
+				open_list.push_back(successor);
+				//open_vector_list.pop_back();
+				//Calculate the F, G, and H costs of this successor
+				// set the cost (g) of successor to be the cost of current plus the cost to get to successor from current
+				successor->g = current->g + EDGE_COST; // cost from current to successor is always 1
+				// set h to be the estimated distance to goal (using heuristic function)
+				successor->h = heuristicDistance(successor, destination);
+			}
+			//If the successor is in the open list
+			else
+			{
+				//Check to see if G cost of the successor node is better
+				if(successor->g < current->g)
+				{
+					//If the G cost is lower, then change the parent of the successor to the current node
+					//successor->parent = current;
+					//Recalculate the G and F scores of the successor
+					successor->g = current->g + EDGE_COST;
+					//Resort the open list by F score - optional
+					sortList(open_list);
+				}
 
-			// remove successor from both open and closed
-			removeFromPQ(&open_list, successor);
-			removeFromVector(&closed_list, successor);
-
-			// set parent of successor to current
-			successor->parent = current;
-
-			// set h to be the estimated distance to goal (using heuristic function)
-			successor->h = heuristicDistance(successor, destination);
-
-			// add successor to open list
-			open_list.push(successor);
+			}
+			
 		}
 
-		// add current to closed list
-		closed_list.push_back(current);
+		
 	}
 	
-	return closed_list; // return the closed list (is this correct?)
+	return closed_list; // return the closed list
+}
+
+//Create a sorting function based on the lowest f using bubble sort
+//see: http://www.cprogramming.com/tutorial/computersciencetheory/sorting1.html
+template <class GraphTemplateType>
+void Graph<GraphTemplateType>::sortList(vector<Node<char>*>&openList)
+{
+	for(int i = 0; i < openList.size()-1; i++)
+	{
+		
+		for(int j = 0; j < openList.size()-1; j++)
+		{
+			Node<char>* temp = openList[j];
+			Node<char>* temp2 = openList[j+1];
+			if(temp->getF() < temp2->getF())
+			{
+				openList[j] = temp2;
+				openList[j+1] = temp;
+			}
+			
+		}
+	}
 }
 
 // Use the distance formula as the heuristic
@@ -193,12 +221,12 @@ float Graph<GraphTemplateType>::heuristicDistance(const Node<char>* n1, const No
 
 // Returns true if the node is in the priority queue
 template <class GraphTemplateType>
-bool Graph<GraphTemplateType>::isInPriorityQueue(priority_queue<Node<char>*> pqueue, const Node<char>* n)
+bool Graph<GraphTemplateType>::isInPriorityQueue(vector<Node<char>*> pqueue, const Node<char>* n)
 {
 	while(pqueue.size() > 0)
 	{
-		Node<char>* current = pqueue.top();
-		pqueue.pop();
+		Node<char>* current = pqueue.front();
+		pqueue.pop_back();
 
 		if(current == n)
 		{
@@ -222,62 +250,6 @@ bool Graph<GraphTemplateType>::isInVector(vector<Node<char>*> vect, const Node<c
 		}
 	}
 	return false;
-}
-
-template <class GraphTemplateType>
-void Graph<GraphTemplateType>::removeFromPQ(priority_queue<Node<char>*>* pqueue, const Node<char>* n)
-{
-	// Use a second pq to store popped items
-	priority_queue<Node<char>*> temporary;
-	
-	while(pqueue->size() > 0)
-	{
-		Node<char>* current = pqueue->top();
-		pqueue->pop();
-
-		// Add to temporary list if it's not the one we're removing
-		if(current != n)
-		{
-			temporary.push(current);
-		}
-	}
-
-	// Fill the original back up
-	while(temporary.size() > 0)
-	{
-		Node<char>* current = temporary.top();
-		temporary.pop();
-
-		pqueue->push(current);
-	}
-}
-
-template <class GraphTemplateType>
-void Graph<GraphTemplateType>::removeFromVector(vector<Node<char>*>* vect, const Node<char>* n)
-{
-	// Use a second vector to store popped items
-	vector<Node<char>*> temporary;
-	
-	while(vect->size() > 0)
-	{
-		Node<char>* current = vect->back();
-		vect->pop_back();
-
-		// Add to temporary list if it's not the one we're removing
-		if(current != n)
-		{
-			temporary.push_back(current);
-		}
-	}
-
-	// Fill the original back up
-	while(temporary.size() > 0)
-	{
-		Node<char>* current = temporary.back();
-		temporary.pop_back();
-
-		vect->push_back(current);
-	}
 }
 
 // Returns all in-bounds neighbors of a node
