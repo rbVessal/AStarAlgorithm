@@ -19,27 +19,6 @@ public:
 	const Node<TemplateDataType>& operator=(const Node<TemplateDataType>& other);
 	~Node(void);
 
-
-	// Overload < and > operators for Node comparison (used in priority queue)
-	//Must make these functions non-member functions since an operator overload
-	//member function only takes one parameter
-	// see: http://www.velocityreviews.com/forums/t279133-overloading-operator.html
-	bool operator< (const Node<TemplateDataType>& n1)
-	{
-		// Returns inverse of f so that lower f = higher priority
-		int f1 = static_cast<int>(this->getF() * -1);
-		int f2 = static_cast<int>(n1.getF() * -1);
-		return f1 < f2;
-	}
-
-	bool operator> (const Node<TemplateDataType>& n1)
-	{
-		// Returns inverse of f so that lower f = higher priority
-		int f1 = static_cast<int>(this->getF() * -1);
-		int f2 = static_cast<int>(n1.getF() * -1);
-		return f1 > f2;
-	}
-
 	void print();
 
 	// Setters and getters
@@ -53,11 +32,43 @@ public:
 	// Public attributes with temp values for algorithm
 	float g;
 	float h;
-	Node* parent;
 
 private:
 	// Attributes
 	TemplateDataType displayData;
+	int x;
+	int y;
+};
+
+//Explicit specialization of Node with int
+//see: http://msdn.microsoft.com/en-us/library/7y5ca42y.aspx
+template<> class Node<int>
+{
+	public:
+	// Big Three / Constructors
+	Node(void);
+	Node(int row, int col, char displayData);
+	Node(const Node<char>& other);
+	const Node<int>& operator=(const Node<int>& other);
+	~Node(void);
+
+	void print();
+
+	// Setters and getters
+	int getX() const;
+	int getY() const;
+	float getF() const;
+	char getDisplayData() const;
+
+	void setDisplayData(char displayData);
+
+	// Public attributes with temp values for algorithm
+	float g;
+	float h;
+
+private:
+	// Attributes
+	char displayData;
 	int x;
 	int y;
 };
