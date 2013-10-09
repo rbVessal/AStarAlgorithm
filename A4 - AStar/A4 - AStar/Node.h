@@ -46,6 +46,7 @@ public:
 	int getX() const;
 	int getY() const;
 	float getF() const;
+	TemplateDataType getDisplayData() const;
 
 	void setDisplayData(TemplateDataType displayData);
 

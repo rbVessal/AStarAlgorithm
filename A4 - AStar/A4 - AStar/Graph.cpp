@@ -67,7 +67,6 @@ vector<Node<char>*> Graph<GraphTemplateType>::findPath(int x1, int y1, int x2, i
 	Node<char>* endNode = grid[x2][y2];
 
 	vector<Node<char>*> path = findPath(startNode, endNode);
-	//Node<char>* goal = findPath(startNode, endNode);
 
 	// Highlight the path
 	for(size_t i=0; i < path.size(); i++)
@@ -89,6 +88,9 @@ vector<Node<char>*> Graph<GraphTemplateType>::findPath(int x1, int y1, int x2, i
 		}
 		
 	}
+
+	//Write to a file
+	writeToFile();
 
 	//return goal;
 	return path;
@@ -146,12 +148,12 @@ vector<Node<char>*> Graph<GraphTemplateType>::findPath(Node<char>* start, Node<c
 			successors.pop_back();
 
 			// if successor is on the CLOSED list, then ignore it
-			if(isInVector(closed_list, successor))
+			if(isInClosedList(closed_list, successor))
 			{
 				continue;
 			}
 			// Check to see if the successor is not in the open list
-			else if(!(isInPriorityQueue(open_list, successor)))
+			else if(!(isInOpenList(open_list, successor)))
 			{
 				// add successor to open list
 				//open_vector_list.push_back(successor);
@@ -221,12 +223,12 @@ float Graph<GraphTemplateType>::heuristicDistance(const Node<char>* n1, const No
 
 // Returns true if the node is in the priority queue
 template <class GraphTemplateType>
-bool Graph<GraphTemplateType>::isInPriorityQueue(vector<Node<char>*> pqueue, const Node<char>* n)
+bool Graph<GraphTemplateType>::isInOpenList(vector<Node<char>*> openList, const Node<char>* n)
 {
-	while(pqueue.size() > 0)
+	while(openList.size() > 0)
 	{
-		Node<char>* current = pqueue.front();
-		pqueue.pop_back();
+		Node<char>* current = openList.front();
+		openList.pop_back();
 
 		if(current == n)
 		{
@@ -238,11 +240,11 @@ bool Graph<GraphTemplateType>::isInPriorityQueue(vector<Node<char>*> pqueue, con
 }
 
 template <class GraphTemplateType>
-bool Graph<GraphTemplateType>::isInVector(vector<Node<char>*> vect, const Node<char>* n)
+bool Graph<GraphTemplateType>::isInClosedList(vector<Node<char>*> closedList, const Node<char>* n)
 {
-	for(size_t i=0; i < vect.size(); i++)
+	for(size_t i=0; i < closedList.size(); i++)
 	{
-		Node<char>* current = vect[i];
+		Node<char>* current = closedList[i];
 
 		if(current == n)
 		{
@@ -323,6 +325,29 @@ void Graph<GraphTemplateType>::print()
 	}
 }
 
+//Write the results of A* algorithm to a file
+//see: http://www.cplusplus.com/doc/tutorial/files/
+template <class GraphTemplateType>
+void Graph<GraphTemplateType>::writeToFile()
+{
+	ofstream fileWithAStarOutput("A Star Results.txt");
+	if(fileWithAStarOutput.is_open())
+	{
+		for(int i=0; i<rows; i++)
+		{
+			for(int j=0; j<cols; j++)
+			{
+				char data = grid[i][j]->getDisplayData();
+				fileWithAStarOutput << data;
+			}
+			fileWithAStarOutput << endl;
+		}
+	
+		fileWithAStarOutput.close();
+	}
+}
+
+//Destructor
 template <class GraphTemplateType>
 Graph<GraphTemplateType>::~Graph(void)
 {

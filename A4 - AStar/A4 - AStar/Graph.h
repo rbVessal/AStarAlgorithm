@@ -4,6 +4,8 @@
 #include "Node.cpp" //Need to include cpp file because of compile time with templates
 #include <vector>
 #include <queue>
+#include <iostream>
+#include <fstream>
 
 //Functor to be used for sorting the nodes based on lowest f value
 //see: http://comsci.liu.edu/~jrodriguez/cs631sp08/c++priorityqueue.html
@@ -36,22 +38,22 @@ public:
 	// Functions
 	void initBoard();
 	void print();
-	//Node<char>* findPath(Node<char>*, Node<char>*); // A* algorithm that takes start and end node
-	//Node<char>* findPath(int, int, int, int); // an overload of the function that takes coordinates
 	vector<Node<char>*> findPath(Node<char>*, Node<char>*); // A* algorithm that takes start and end node
 	vector<Node<char>*> findPath(int, int, int, int); // an overload of the function that takes coordinates
-	float heuristicDistance(const Node<char>*, const Node<char>*); // Distance between two nodes
-	vector<Node<char>*> getAllNeighbors(const Node<char>*);
-	bool isInPriorityQueue(vector<Node<char>*>, const Node<char>*);
-	bool isInVector(vector<Node<char>*>, const Node<char>*);
-	void removeFromPQ(priority_queue<Node<char>*>*, const Node<char>*);
-	void removeFromVector(vector<Node<char>*>*, const Node<char>*);
-	void sortList(vector<Node<char>*>&openList);
+	
+	
 
 private:
 	// Attributes
 	Node<char>*** grid; // 2D Grid of node pointers
 	int rows;
 	int cols;
+
+	float heuristicDistance(const Node<char>*, const Node<char>*); // Distance between two nodes
+	vector<Node<char>*> getAllNeighbors(const Node<char>*);//Get adjacent nodes to the current node
+	bool isInOpenList(vector<Node<char>*>, const Node<char>*);
+	bool isInClosedList(vector<Node<char>*>, const Node<char>*);
+	void sortList(vector<Node<char>*>&openList);
+	void writeToFile();
 };
 #endif

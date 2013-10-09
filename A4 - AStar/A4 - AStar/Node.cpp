@@ -70,6 +70,12 @@ float Node<TemplateDataType>::getF() const
 }
 
 template <class TemplateDataType>
+TemplateDataType Node<TemplateDataType>::getDisplayData() const
+{
+	return displayData;
+}
+
+template <class TemplateDataType>
 void Node<TemplateDataType>::setDisplayData(TemplateDataType displayData)
 {
 	this->displayData = displayData;
