@@ -15,11 +15,12 @@ Node<TemplateDataType>::Node(void)
 
 //Parameterized constructor
 template <class TemplateDataType>
-Node<TemplateDataType>::Node(int row, int col, TemplateDataType displayData)
+Node<TemplateDataType>::Node(int row, int col, char displayData)
 {
 	x = row;
 	y = col;
 	this->displayData = displayData;
+	
 }
 
 //Copy constructor
@@ -69,13 +70,13 @@ float Node<TemplateDataType>::getF() const
 }
 
 template <class TemplateDataType>
-TemplateDataType Node<TemplateDataType>::getDisplayData() const
+char Node<TemplateDataType>::getDisplayData() const
 {
 	return displayData;
 }
 
 template <class TemplateDataType>
-void Node<TemplateDataType>::setDisplayData(TemplateDataType displayData)
+void Node<TemplateDataType>::setDisplayData(char displayData)
 {
 	this->displayData = displayData;
 }
@@ -86,6 +87,7 @@ Node<TemplateDataType>::~Node(void)
 {
 	x = 0;
 	y = 0;
+	displayData = 0;
 }
 
 //Print out the character of the node
@@ -95,12 +97,11 @@ void Node<TemplateDataType>::print()
 	cout << displayData;
 }
 
-
 //Explicit template specialization of int
 //as template member functions
 //see: http://publib.boulder.ibm.com/infocenter/lnxpcomp/v8v101/index.jsp?topic=%2Fcom.ibm.xlcpp8l.doc%2Flanguage%2Fref%2Fexplicit_specialization.htm
 //Default constructor
-Node<int>::Node(void)
+/*Node<int>::Node(void)
 {
 	displayData = ' ';
 }
@@ -175,4 +176,4 @@ Node<int>::~Node(void)
 void Node<int>::print()
 {
 	cout << displayData;
-}
+}*/

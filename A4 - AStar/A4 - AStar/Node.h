@@ -14,7 +14,7 @@ class Node
 public:
 	// Big Three / Constructors
 	Node(void);
-	Node(int row, int col, TemplateDataType displayData);
+	Node(int row, int col, char displayData);
 	Node(const Node<TemplateDataType>& other);
 	const Node<TemplateDataType>& operator=(const Node<TemplateDataType>& other);
 	~Node(void);
@@ -25,9 +25,9 @@ public:
 	int getX() const;
 	int getY() const;
 	float getF() const;
-	TemplateDataType getDisplayData() const;
+	char getDisplayData() const;
 
-	void setDisplayData(TemplateDataType displayData);
+	void setDisplayData(char displayData);
 
 	// Public attributes with temp values for algorithm
 	float g;
@@ -35,20 +35,21 @@ public:
 
 private:
 	// Attributes
-	TemplateDataType displayData;
+	char displayData;
 	int x;
 	int y;
+	
 };
 
 //Explicit specialization of Node with int
 //see: http://msdn.microsoft.com/en-us/library/7y5ca42y.aspx
 template<> class Node<int>
 {
-	public:
+public:
 	// Big Three / Constructors
 	Node(void);
 	Node(int row, int col, char displayData);
-	Node(const Node<char>& other);
+	Node(const Node<int>& other);
 	const Node<int>& operator=(const Node<int>& other);
 	~Node(void);
 
@@ -71,5 +72,6 @@ private:
 	char displayData;
 	int x;
 	int y;
+
 };
 #endif
